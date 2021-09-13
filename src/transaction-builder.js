@@ -1,5 +1,5 @@
 const Bitcoin = require('@psf/bitcoincashjs-lib')
-const coininfo = require('@psf/coininfo')
+const coininfo = require('../../coininfo')
 const bip66 = require('bip66')
 const bip68 = require('bc-bip68')
 
@@ -10,7 +10,7 @@ class TransactionBuilder {
 
   constructor (network = 'mainnet') {
     let bitcoincash
-    if (network === 'bitcoincash' || network === 'mainnet') { bitcoincash = coininfo.bitcoincash.main } else bitcoincash = coininfo.bitcoincash.test
+    if (network === 'ergon' || network === 'mainnet') { bitcoincash = coininfo.ergon.main } else bitcoincash = coininfo.ergon.test
 
     const bitcoincashBitcoinJSLib = bitcoincash.toBitcoinJS()
     this.transaction = new Bitcoin.TransactionBuilder(bitcoincashBitcoinJSLib)

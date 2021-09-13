@@ -3,7 +3,7 @@ const sb = require('satoshi-bitcoin')
 const bitcoinMessage = require('bitcoinjs-message')
 const bs58 = require('bs58')
 const bip21 = require('@psf/bip21')
-const coininfo = require('@psf/coininfo')
+const coininfo = require('../../coininfo')
 const bip38 = require('bip38')
 const wif = require('wif')
 
@@ -150,8 +150,8 @@ class BitcoinCash {
   signMessageWithPrivKey (privateKeyWIF, message) {
     const network = privateKeyWIF.charAt(0) === 'c' ? 'testnet' : 'mainnet'
     let bitcoincash
-    if (network === 'mainnet') bitcoincash = coininfo.bitcoincash.main
-    else bitcoincash = coininfo.bitcoincash.test
+    if (network === 'mainnet') bitcoincash = coininfo.ergon.main
+    else bitcoincash = coininfo.ergon.test
 
     const bitcoincashBitcoinJSLib = bitcoincash.toBitcoinJS()
     const keyPair = Bitcoin.ECPair.fromWIF(

@@ -238,7 +238,7 @@ class Mnemonic {
    * @apiName toKeypairs
    * @apiGroup Mnemonic
    * @apiDescription
-   * Returns an array of privateKeyWIF/publicAddress pairs. It generates the addresses as the nth external change address of the first account from that mnemonic w/ this derivation path: m/44’/145’/0’/0/n
+   * Returns an array of privateKeyWIF/publicAddress pairs. It generates the addresses as the nth external change address of the first account from that mnemonic w/ this derivation path: m/44’/2137’/0’/0/n
    *
    * @apiExample Example usage:
    * // First create a mnemonic from 32 bytes of random entropy
@@ -263,7 +263,7 @@ class Mnemonic {
   async toKeypairs (mnemonic, numberOfKeypairs = 1, regtest = false) {
     const rootSeedBuffer = await this.toSeed(mnemonic, '')
     const hdNode = Bitcoin.HDNode.fromSeedBuffer(rootSeedBuffer)
-    const HDPath = "44'/145'/0'/0/"
+    const HDPath = "44'/2137'/0'/0/"
 
     const accounts = []
 

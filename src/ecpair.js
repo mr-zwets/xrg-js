@@ -1,5 +1,5 @@
 const Bitcoin = require('@psf/bitcoincashjs-lib')
-const coininfo = require('@psf/coininfo')
+const coininfo = require('../../coininfo')
 
 class ECPair {
   static setAddress (address) {
@@ -26,8 +26,8 @@ class ECPair {
     if (privateKeyWIF[0] === 'L' || privateKeyWIF[0] === 'K') { network = 'mainnet' } else if (privateKeyWIF[0] === 'c') network = 'testnet'
 
     let bitcoincash
-    if (network === 'mainnet') bitcoincash = coininfo.bitcoincash.main
-    else bitcoincash = coininfo.bitcoincash.test
+    if (network === 'mainnet') bitcoincash = coininfo.ergon.main
+    else bitcoincash = coininfo.ergon.test
 
     const bitcoincashBitcoinJSLib = bitcoincash.toBitcoinJS()
 

@@ -1,5 +1,5 @@
 const Bitcoin = require('@psf/bitcoincashjs-lib')
-const coininfo = require('@psf/coininfo')
+const coininfo = require('../../coininfo')
 const bip32utils = require('@psf/bip32-utils')
 const bchaddrjs = require('bchaddrjs-slp')
 
@@ -34,7 +34,7 @@ class HDNode {
    */
   fromSeed (rootSeedBuffer, network = 'mainnet') {
     let bitcoincash
-    if (network === 'bitcoincash' || network === 'mainnet') { bitcoincash = coininfo.bitcoincash.main } else bitcoincash = coininfo.bitcoincash.test
+    if (network === 'ergon' || network === 'mainnet') { bitcoincash = coininfo.ergon.main } else bitcoincash = coininfo.ergon.test
 
     const bitcoincashBitcoinJSLib = bitcoincash.toBitcoinJS()
     return Bitcoin.HDNode.fromSeedBuffer(
@@ -329,8 +329,8 @@ class HDNode {
    */
   fromXPriv (xpriv) {
     let bitcoincash
-    if (xpriv[0] === 'x') bitcoincash = coininfo.bitcoincash.main
-    else if (xpriv[0] === 't') bitcoincash = coininfo.bitcoincash.test
+    if (xpriv[0] === 'x') bitcoincash = coininfo.ergon.main
+    else if (xpriv[0] === 't') bitcoincash = coininfo.ergon.test
 
     const bitcoincashBitcoinJSLib = bitcoincash.toBitcoinJS()
     return Bitcoin.HDNode.fromBase58(xpriv, bitcoincashBitcoinJSLib)
@@ -352,8 +352,8 @@ class HDNode {
    */
   fromXPub (xpub) {
     let bitcoincash
-    if (xpub[0] === 'x') bitcoincash = coininfo.bitcoincash.main
-    else if (xpub[0] === 't') bitcoincash = coininfo.bitcoincash.test
+    if (xpub[0] === 'x') bitcoincash = coininfo.ergon.main
+    else if (xpub[0] === 't') bitcoincash = coininfo.ergon.test
 
     const bitcoincashBitcoinJSLib = bitcoincash.toBitcoinJS()
     return Bitcoin.HDNode.fromBase58(xpub, bitcoincashBitcoinJSLib)
@@ -374,7 +374,7 @@ class HDNode {
    *   // create HDNode from seed buffer
    *   let hdNode = bchjs.HDNode.fromSeed(seedBuffer);
    *   // derive hardened child HDNode
-   *   bchjs.HDNode.derivePath(hdNode, "m/44'/145'/0'");
+   *   bchjs.HDNode.derivePath(hdNode, "m/44'/2137'/0'");
    */
   derivePath (hdnode, path) {
     return hdnode.derivePath(path)
@@ -619,7 +619,7 @@ class HDNode {
    *   // create master hd node
    *   let masterHDNode = bchjs.HDNode.fromSeed(rootSeedBuffer);
    *   // derive child node
-   *   let childNode = masterHDNode.derivePath("m/44'/145'/0'/0");
+   *   let childNode = masterHDNode.derivePath("m/44'/2137'/0'/0");
    *   // create account
    *   let account = bchjs.HDNode.createAccount([childNode]);
    */

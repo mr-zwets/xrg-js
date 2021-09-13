@@ -1,7 +1,7 @@
 // const axios = require("axios")
 const Bitcoin = require('@psf/bitcoincashjs-lib')
 const cashaddr = require('cashaddrjs')
-const coininfo = require('@psf/coininfo')
+const coininfo = require('../../coininfo')
 
 class Address {
   constructor (config) {
@@ -38,7 +38,7 @@ class Address {
    *
    * @apiExample Example usage:
    * // mainnet w/ prefix
-   * bchjs.Address.toLegacyAddress('bitcoincash:qzm47qz5ue99y9yl4aca7jnz7dwgdenl85jkfx3znl')
+   * bchjs.Address.toLegacyAddress('ergon:qzm47qz5ue99y9yl4aca7jnz7dwgdenl85jkfx3znl')
    * // 1HiaTupadqQN66Tvgt7QSE5Wg13BUy25eN
    *
    * // mainnet w/ no prefix
@@ -57,16 +57,10 @@ class Address {
   toLegacyAddress (address) {
     const { prefix, type, hash } = this._decode(address)
 
-    let bitcoincash
+    let ergon
     switch (prefix) {
-      case 'bitcoincash':
-        bitcoincash = coininfo.bitcoincash.main
-        break
-      case 'bchtest':
-        bitcoincash = coininfo.bitcoincash.test
-        break
-      case 'bchreg':
-        bitcoincash = coininfo.bitcoincash.regtest
+      case 'ergon':
+        ergon = coininfo.ergon.main
         break
       default:
         throw new Error(`unsupported prefix : ${prefix}`)
@@ -75,10 +69,10 @@ class Address {
     let version
     switch (type) {
       case 'P2PKH':
-        version = bitcoincash.versions.public
+        version = ergon.versions.public
         break
       case 'P2SH':
-        version = bitcoincash.versions.scripthash
+        version = ergon.versions.scripthash
         break
       default:
         throw new Error(`unsupported address type : ${type}`)
@@ -98,7 +92,7 @@ class Address {
    * @apiExample Example usage:
    * // mainnet
    * bchjs.Address.toCashAddress('1HiaTupadqQN66Tvgt7QSE5Wg13BUy25eN')
-   * // bitcoincash:qzm47qz5ue99y9yl4aca7jnz7dwgdenl85jkfx3znl
+   * // ergon:qzm47qz5ue99y9yl4aca7jnz7dwgdenl85jkfx3znl
    *
    * // mainnet no prefix
    * bchjs.Address.toCashAddress('1HiaTupadqQN66Tvgt7QSE5Wg13BUy25eN', false)
@@ -170,9 +164,9 @@ class Address {
    *
    * @apiExample Example usage:
    * bchjs.Address.hash160ToCash("573d93b475be4f1925f3b74ed951201b0147eac1")
-   * 'bitcoincash:qptnmya5wkly7xf97wm5ak23yqdsz3l2cyj7k9vyyh'
+   * 'ergon:qptnmya5wkly7xf97wm5ak23yqdsz3l2cyj7k9vyyh'
    * bchjs.Address.hash160ToCash("7dc85da64d1d93ef01ef62e0221c02f512e3942f", 0x05)
-   * 'bitcoincash:pp7ushdxf5we8mcpaa3wqgsuqt639cu59ur5xu5fug'
+   * 'ergon:pp7ushdxf5we8mcpaa3wqgsuqt639cu59ur5xu5fug'
    * bchjs.Address.hash160ToCash("155187a3283b08b30519db50bc23bbba9f4b6657", 0x6f)
    * 'bchtest:qq24rpar9qas3vc9r8d4p0prhwaf7jmx2u22nzt946'
    */
@@ -204,33 +198,19 @@ class Address {
 
   _decodeLegacyAddress (address) {
     const { version, hash } = Bitcoin.address.fromBase58Check(address)
-    const info = coininfo.bitcoincash
+    const info = coininfo.ergon
 
     switch (version) {
       case info.main.versions.public:
         return {
-          prefix: 'bitcoincash',
+          prefix: 'ergon',
           type: 'P2PKH',
           hash: hash,
           format: 'legacy'
         }
       case info.main.versions.scripthash:
         return {
-          prefix: 'bitcoincash',
-          type: 'P2SH',
-          hash: hash,
-          format: 'legacy'
-        }
-      case info.test.versions.public:
-        return {
-          prefix: 'bchtest',
-          type: 'P2PKH',
-          hash: hash,
-          format: 'legacy'
-        }
-      case info.test.versions.scripthash:
-        return {
-          prefix: 'bchtest',
+          prefix: 'ergon',
           type: 'P2SH',
           hash: hash,
           format: 'legacy'
@@ -247,7 +227,7 @@ class Address {
       return decoded
     }
 
-    const prefixes = ['bitcoincash', 'bchtest', 'bchreg']
+    const prefixes = ['ergon']
     for (let i = 0; i < prefixes.length; ++i) {
       try {
         const decoded = cashaddr.decode(`${prefixes[i]}:${address}`)
@@ -279,7 +259,7 @@ class Address {
    *
    * @apiExample Example usage:
    *  // cashaddr
-   * bchjs.Address.isLegacyAddress('bitcoincash:qqfx3wcg8ts09mt5l3zey06wenapyfqq2qrcyj5x0s')
+   * bchjs.Address.isLegacyAddress('ergon:qqfx3wcg8ts09mt5l3zey06wenapyfqq2qrcyj5x0s')
    * // false
    *
    * // w/ no cashaddr prefix
@@ -315,7 +295,7 @@ class Address {
    *
    * @apiExample Example usage:
    * // mainnet cashaddr
-   * bchjs.Address.isCashAddress('bitcoincash:qqfx3wcg8ts09mt5l3zey06wenapyfqq2qrcyj5x0s')
+   * bchjs.Address.isCashAddress('ergon:qqfx3wcg8ts09mt5l3zey06wenapyfqq2qrcyj5x0s')
    * // true
    *
    * // mainnet w/ no cashaddr prefix
@@ -353,7 +333,7 @@ class Address {
    *  bchjs.Address.isHash160(hash160Address);
    *  // true
    *
-   *  let notHash160Address = 'bitcoincash:pz8a837lttkvjksg0jjmmulqvfkgpqrcdgufy8ns5s';
+   *  let notHash160Address = 'ergon:pz8a837lttkvjksg0jjmmulqvfkgpqrcdgufy8ns5s';
    *  bchjs.Address.isHash160(notHash160Address);
    *  // false
    */
@@ -369,7 +349,7 @@ class Address {
    *
    * @apiExample Example usage:
    *  // mainnet cashaddr
-   * bchjs.Address.isMainnetAddress('bitcoincash:qqfx3wcg8ts09mt5l3zey06wenapyfqq2qrcyj5x0s')
+   * bchjs.Address.isMainnetAddress('ergon:qqfx3wcg8ts09mt5l3zey06wenapyfqq2qrcyj5x0s')
    * // true
    *
    * // mainnet cashaddr w/ no prefix
@@ -408,7 +388,7 @@ class Address {
    *
    * @apiExample Example usage:
    *   // cashaddr mainnet
-   * bchjs.Address.isTestnetAddress('bitcoincash:qqfx3wcg8ts09mt5l3zey06wenapyfqq2qrcyj5x0s')
+   * bchjs.Address.isTestnetAddress('ergon:qqfx3wcg8ts09mt5l3zey06wenapyfqq2qrcyj5x0s')
    * //false
    *
    * // w/ no cashaddr prefix
@@ -454,7 +434,7 @@ class Address {
    * // true
    *
    * // cashaddr mainnet
-   * bchjs.Address.isRegTestAddress('bitcoincash:qqfx3wcg8ts09mt5l3zey06wenapyfqq2qrcyj5x0s')
+   * bchjs.Address.isRegTestAddress('ergon:qqfx3wcg8ts09mt5l3zey06wenapyfqq2qrcyj5x0s')
    * //false
    *
    * // w/ no cashaddr prefix
@@ -485,7 +465,7 @@ class Address {
    *
    * @apiExample Example usage:
    *   // cashaddr
-   *  bchjs.Address.isP2PKHAddress('bitcoincash:qqfx3wcg8ts09mt5l3zey06wenapyfqq2qrcyj5x0s')
+   *  bchjs.Address.isP2PKHAddress('ergon:qqfx3wcg8ts09mt5l3zey06wenapyfqq2qrcyj5x0s')
    *  // true
    *
    *  // w/ no cashaddr prefix
@@ -522,7 +502,7 @@ class Address {
    *
    * @apiExample Example usage:
    *   // cashaddr
-   *  bchjs.Address.isP2SHAddress('bitcoincash:qqfx3wcg8ts09mt5l3zey06wenapyfqq2qrcyj5x0s')
+   *  bchjs.Address.isP2SHAddress('ergon:qqfx3wcg8ts09mt5l3zey06wenapyfqq2qrcyj5x0s')
    *  // false
    *
    *  // cashaddr w/ no prefix
@@ -558,7 +538,7 @@ class Address {
    *
    * @apiExample Example usage:
    *   // cashaddr
-   *  bchjs.Address.detectAddressFormat('bitcoincash:qqfx3wcg8ts09mt5l3zey06wenapyfqq2qrcyj5x0s')
+   *  bchjs.Address.detectAddressFormat('ergon:qqfx3wcg8ts09mt5l3zey06wenapyfqq2qrcyj5x0s')
    *  // cashaddr
    *
    *  // cashaddr w/ no prefix
@@ -596,7 +576,7 @@ class Address {
    *
    * @apiExample Example usage:
    *   // cashaddr
-   *  bchjs.Address.detectAddressNetwork('bitcoincash:qqfx3wcg8ts09mt5l3zey06wenapyfqq2qrcyj5x0s')
+   *  bchjs.Address.detectAddressNetwork('ergon:qqfx3wcg8ts09mt5l3zey06wenapyfqq2qrcyj5x0s')
    *  // mainnet
    *
    *  // cashaddr w/ no prefix
@@ -627,12 +607,8 @@ class Address {
     const decoded = this._decode(address)
 
     switch (decoded.prefix) {
-      case 'bitcoincash':
+      case 'ergon':
         return 'mainnet'
-      case 'bchtest':
-        return 'testnet'
-      case 'bchreg':
-        return 'regtest'
       default:
         throw new Error(`Invalid prefix : ${decoded.prefix}`)
     }
@@ -646,7 +622,7 @@ class Address {
    *
    * @apiExample Example usage:
    *   // cashaddr
-   *  bchjs.Address.detectAddressType('bitcoincash:qqfx3wcg8ts09mt5l3zey06wenapyfqq2qrcyj5x0s');
+   *  bchjs.Address.detectAddressType('ergon:qqfx3wcg8ts09mt5l3zey06wenapyfqq2qrcyj5x0s');
    *  // p2pkh
    *
    *  // cashaddr w/ no prefix
@@ -688,11 +664,11 @@ class Address {
    *  for(let i = 0; i <= 4; i++) {
    *    console.log(bchjs.Address.fromXPub(xpub, "0/" + i))
    *  }
-   *  // bitcoincash:qptnmya5wkly7xf97wm5ak23yqdsz3l2cyj7k9vyyh
-   *  // bitcoincash:qrr2suh9yjsrkl2qp3p967uhfg6u0r6xxsn9h5vuvr
-   *  // bitcoincash:qpkfg4kck99wksyss6nvaqtafeahfnyrpsj0ed372t
-   *  // bitcoincash:qppgmuuwy07g0x39sx2z0x2u8e34tvfdxvy0c2jvx7
-   *  // bitcoincash:qryj8x4s7vfsc864jm0xaak9qfe8qgk245y9ska57l
+   *  // ergon:qptnmya5wkly7xf97wm5ak23yqdsz3l2cyj7k9vyyh
+   *  // ergon:qrr2suh9yjsrkl2qp3p967uhfg6u0r6xxsn9h5vuvr
+   *  // ergon:qpkfg4kck99wksyss6nvaqtafeahfnyrpsj0ed372t
+   *  // ergon:qppgmuuwy07g0x39sx2z0x2u8e34tvfdxvy0c2jvx7
+   *  // ergon:qryj8x4s7vfsc864jm0xaak9qfe8qgk245y9ska57l
    *
    *  // generate 5 testnet external change addresses for tpubDCrnMSKwDMAbxg82yqDt97peMvftCXk3EfBb9WgZh27mPbHGkysU3TW7qX5AwydmnVQfaGeNhUR6okQ3dS5AJTP9gEP7jk2Wcj6Xntc6gNh
    *  let xpub = 'tpubDCrnMSKwDMAbxg82yqDt97peMvftCXk3EfBb9WgZh27mPbHGkysU3TW7qX5AwydmnVQfaGeNhUR6okQ3dS5AJTP9gEP7jk2Wcj6Xntc6gNh';
@@ -732,7 +708,7 @@ class Address {
    *
    *  // mainnet address from output script
    *  bchjs.Address.fromOutputScript(scriptPubKey);
-   *  // bitcoincash:pz0qcslrqn7hr44hsszwl4lw5r6udkg6zqncnufkrl
+   *  // ergon:pz0qcslrqn7hr44hsszwl4lw5r6udkg6zqncnufkrl
    *
    *  // testnet address from output script
    *  bchjs.Address.fromOutputScript(scriptPubKey, 'testnet');
@@ -740,7 +716,7 @@ class Address {
    */
   fromOutputScript (scriptPubKey, network = 'mainnet') {
     let netParam
-    if (network !== 'bitcoincash' && network !== 'mainnet') {
+    if (network !== 'ergon' && network !== 'mainnet') {
       netParam = Bitcoin.networks.testnet
     }
 
