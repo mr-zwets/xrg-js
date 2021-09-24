@@ -31,10 +31,10 @@
     "lint": "standard --env mocha --fix"
   },
   "license": "MIT",
-  "homepage": "https://github.com/Permissionless-Software-Foundation/bch-js",
+  "homepage": "https://github.com/mr-zwets/xrg-js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Permissionless-Software-Foundation/bch-js.git"
+    "url": "git+https://github.com/mr-zwets/xrg-js.git"
   },
   "dependencies": {
     "@psf/bip21": "^2.0.1",
@@ -45,7 +45,6 @@
     "@uppy/tus": "^1.5.12",
     "axios": "^0.21.1",
     "bc-bip68": "^1.0.5",
-    "bchaddrjs-slp": "^0.2.5",
     "bigi": "^1.4.2",
     "bignumber.js": "^9.0.0",
     "bip-schnorr": "^0.3.0",
@@ -54,7 +53,9 @@
     "bip66": "^1.1.5",
     "bitcoinjs-message": "^2.0.0",
     "bs58": "^4.0.1",
-    "cashaddrjs": "^0.3.3",
+    "coininfo-xrg": "^4.0.0",
+    "ergonaddr-slp": "^0.2.14",
+    "ergonaddrjs": "^1.0.0",
     "ini": "^1.3.8",
     "randombytes": "^2.0.6",
     "safe-buffer": "^5.1.2",

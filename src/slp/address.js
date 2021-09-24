@@ -2,7 +2,7 @@ const BCHJSAddress = require('../address')
 // const bchAddress = new BCHJSAddress()
 let bchAddress
 
-const bchaddrjs = require('bchaddrjs-slp')
+const bchaddrjs = require('ergonaddr-slp')
 
 class Address extends BCHJSAddress {
   constructor (config) {

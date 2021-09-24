@@ -1,5 +1,5 @@
 const Bitcoin = require('@psf/bitcoincashjs-lib')
-const coininfo = require('../../coininfo')
+const coininfo = require('coininfo-xrg')
 
 class ECPair {
   static setAddress (address) {
