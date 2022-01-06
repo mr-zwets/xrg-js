@@ -130,6 +130,21 @@ class Address {
     return bytes.hash.toString('hex')
   }
 
+  toScriptHash (hash160, type) {
+    if (type === 'p2pkh') {
+      const p2pkhPrefix = '76a914'
+      const p2pkhSufix = '88ac'
+      const buffer = Buffer.from(p2pkhPrefix + hash160 + p2pkhSufix, 'hex')
+      return Bitcoin.crypto.sha256(buffer).reverse().toString('hex')
+    }
+    if (type === 'p2sh') {
+      const p2shPrefix = 'a914'
+      const p2shSufix = '87'
+      const buffer = Buffer.from(p2shPrefix + hash160 + p2shSufix, 'hex')
+      return Bitcoin.crypto.sha256(buffer).reverse().toString('hex')
+    }
+  }
+
   /**
    * @api Address.hash160ToLegacy() hash160ToLegacy()
    * @apiName hash160ToLegacy
